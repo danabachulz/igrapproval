@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Models;
+
+use Exception;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, Notifiable;
+
+    protected $table = 'accounts';
+
+    public static function get_AccountID($phone_number, $pin){
+        $id = User::Distinct()
+                ->select('id','pin')
+                ->where('phone_number',$phone_number)->get();
+
+        if ($id->isEmpty()) {
+            return [];
+        }
+
+                if (Hash::check($pin, $id[0]->pin))
+                {
+                    return $id[0]->id;
+                }else{
+                    return [];
+                }
+
+    }
+
+    public static function get_AccountInfo($id = "%")
+    {
+        $user = User::Distinct()
+            ->select('*')
+            ->Where('id', $id)
+            ->get();
+
+        return $user[0];
+    }
+
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password', 'phone_number','pin',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+}
