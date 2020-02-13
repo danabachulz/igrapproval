@@ -1,0 +1,194 @@
+<?php
+
+namespace App;
+
+use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+
+class Approvers extends Model
+{
+    /* 
+    getByAccountId()
+        mencari semua data approval berdasarkan account_id
+    */
+    public static function getByAccountId($account_id)
+    {
+        $approvers = DB::table('approvers')
+            ->select('*')
+            ->where('account_id', '=', $account_id)
+            ->get();
+        return $approvers;
+    }
+
+    /* 
+    getByApprovalId()
+        mencari semua data approvers berdasarkan approval_id
+    */
+    public static function getByApprovalId($approval_id)
+    {   
+        //
+        $approvers = DB::table('approvers')
+            ->join('accounts', 'approvers.account_id', '=', 'accounts.id')
+            ->join('position', 'accounts.position_id', '=', 'position.id')
+            ->select(
+                'accounts.id AS account_id',
+                'approvers.approval_status',
+                'approvers.date',
+                'approvers.note',
+                'position.job_level_id'
+            )
+            ->where('approvers.approval_id', '=', $approval_id)
+            ->orderBy('position.job_level_id', 'DESC')
+            ->get();
+        return $approvers;
+    }
+
+    /* 
+    getTotalApprovalByAccountId
+        mencari total approval yang ada berdasarkan account_id
+    */
+    public static function getTotalApprovalByAccountId($account_id)
+    {
+        $TotalApproval = DB::table('approvers')
+            ->select('id')
+            ->where('account_id', '=', $account_id)
+            ->get();
+        return $TotalApproval->count();
+    }
+
+    /* 
+    getTotalApprovedByAccountId
+        mencari total approval yang sudah approved berdasarkan account_id
+    */
+    public static function getTotalApprovedByAccountId($accountId)
+    {
+        $TotalApproved = DB::table('approvers')
+            ->select('id')
+            ->where('account_id', '=', $accountId)
+            ->where('approval_status', '=', 3)
+            ->get();
+        return $TotalApproved->count();
+    }
+
+    /* 
+    getTotalRejectedByAccountId()
+        mencari total approval yang sudah rejected berdasarkan account_id
+    */
+    public static function getTotalRejectedByAccountId($accountId)
+    {
+        $TotalRejected = DB::table('approvers')
+            ->select('id')
+            ->where('account_id', '=', $accountId)
+            ->where('approval_status', '=', 2)
+            ->get();
+        return $TotalRejected->count();
+    }
+
+    /* 
+    getApprovalStatus()
+        mencari approval status berdasarkan account_id dan approval_id
+    */
+    public static function getApprovalStatus($account_id, $approval_id)
+    {
+        try {
+            $result = DB::table('approvers')
+                ->select('approval_status')
+                ->where('account_id', '=', $account_id)
+                ->where('approval_id', '=', $approval_id)
+                ->first();
+            if (!$result) {
+                throw new Exception("Error Query");
+            }
+            return $result->approval_status;
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+
+    /* 
+    updateToApproved()
+        merubah status approval menjadi approved
+    */
+    public static function updateToApproved($account_id, $approval_id)
+    {
+        try {
+            //cek approval status
+            $approval_status = Approvers::getApprovalStatus($account_id, $approval_id);
+            if ($approval_status == 4) {
+                throw new Exception("Expired");
+            } elseif ($approval_status == 3) {
+                throw new Exception("Already Approved");
+            } elseif ($approval_status == 2) {
+                throw new Exception("Already Reject");
+            }
+
+            //run sql, jika update gagal maka result akan bernilai 1
+            $result = DB::table('approvers')
+                ->where('account_id', '=', $account_id)
+                ->where('approval_id', '=', $approval_id)
+                ->update(['approval_status' => "3"]);    
+            if (!$result) {
+                throw new Exception("Error Query");
+            }
+            //jika berhasil return 1
+            return '1';
+        } catch (Exception $ex) {
+            //jika gagal return pesan gagal
+            return $ex->getMessage();
+        }
+    }
+
+    /* 
+    updateToRejected()
+        merubah status approval menjadi rejected
+    */
+    public static function updateToRejected($account_id, $approval_id)
+    {
+        try {
+            //cek approval status
+            $approval_status = Approvers::getApprovalStatus($account_id, $approval_id);
+            if ($approval_status == 4) {
+                throw new Exception("Expired");
+            } elseif ($approval_status == 3) {
+                throw new Exception("Already Approved");
+            } elseif ($approval_status == 2) {
+                throw new Exception("Already Reject");
+            }
+
+            //run sql, jika update gagal maka result akan bernilai 1
+            $result = DB::table('approvers')
+                ->where('account_id', '=', $account_id)
+                ->where('approval_id', '=', $approval_id)
+                ->update(['approval_status' => "2"]);
+            if (!$result) {
+                throw new Exception("Error Query");
+            }
+            //jika berhasil return 1
+            return '1';
+        } catch (Exception $ex) {
+            //jika gagal return pesan gagal
+            return $ex->getMessage();
+        }
+    }
+
+    /* 
+    updateToExpired()
+        merubah status approval menjadi expired
+    */
+    public static function updateToExpired($account_id, $approval_id)
+    {
+        try {
+            $result = DB::table('approvers')
+                ->where('account_id', '=', $account_id)
+                ->where('approval_id', '=', $approval_id)
+                ->update(['approval_status' => "4"]);
+            if (!$result) {
+                throw new Exception("Error Query");
+            }
+            return '1';
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+}
