@@ -20,7 +20,7 @@ class TestController extends Controller
         $job_level = 4;
         $branch_id = 1;
         $approval_status = \DB::table('approvers')
-                                ->select('approvers.id','position.*')
+                                ->select('approvers.id','approvers.approval_id','approvers.approval_status')
                                 ->join('accounts','approvers.account_id','accounts.id')
                                 ->join('position','accounts.position_id','position.id')
                                 //->where('approvers.approval_status',3)
