@@ -23,6 +23,8 @@ Route::post('login', 'UserController@login');
 //register
 Route::post('register', 'UserController@register');
 
+//account detail
+Route::post('getAccountDetail', 'AccountsController@getAccountDetail');
 
 Route::group(['middleware' => 'auth:api'], function(){
 
