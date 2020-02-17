@@ -23,10 +23,26 @@ Route::post('register', 'UserController@register');
 
 /* account detail 
 params: 
--id -> account id user
+1."account_id" -> account id user
 */
-Route::post('getAccountDetail', 'AccountsController@getAccountDetail');
+Route::post('getAccountDetail', 'UserController@getAccountDetail');
 
+/* update approved
+params: 
+1."account_id" -> account id user
+2."approval_id" -> id approval yang akan di update
+*/
+Route::post('updateToApproved', 'ApproversController@actionApprove');
+
+/* update reject
+params: 
+1."account_id" -> account id user
+2."approval_id" -> id approval yang akan di update 
+*/
+Route::post('updateToRejected', 'ApproversController@actionReject');
+
+
+/* Middleware */
 Route::group(['middleware' => 'auth:api'], function(){
 
     //testing

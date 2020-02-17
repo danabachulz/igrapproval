@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Approvers;
+use App\Models\Approvers;
+use App\Models\AppMessage;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -29,12 +30,7 @@ class ApproversController extends Controller
                 'error_message'     => ''
             ]);
         } catch (Exception $ex) {
-            return response()->json([
-                'api_status'        => 2,
-                'api_message'       => 'gagal',
-                'error_code'        => '',
-                'error_message'     => $ex->getMessage()
-            ]);
+            return AppMessage::get_error_message(401, $ex->getMessage());
         }
     }
 
@@ -57,12 +53,7 @@ class ApproversController extends Controller
                 'error_message'     => ''
             ]);
         } catch (Exception $ex) {
-            return response()->json([
-                'api_status'        => 2,
-                'api_message'       => 'gagal',
-                'error_code'        => '',
-                'error_message'     => $ex->getMessage()
-            ]);
+            return AppMessage::get_error_message(401, $ex->getMessage());
         }
     }
 
