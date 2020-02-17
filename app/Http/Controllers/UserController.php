@@ -81,7 +81,7 @@ class UserController extends Controller
         try {
             //search detail user account
             $account_id = request('account_id');
-            $accounts = User::get_AccountInfo($account_id);
+            $accounts = User::get_AccountById($account_id);
 
             //search total approval
             $total_approval = Approvers::getTotalApprovalByAccountId($account_id);
