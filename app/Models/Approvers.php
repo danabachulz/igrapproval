@@ -1,6 +1,7 @@
 <?php
 
-namespace App;
+
+namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class Approvers extends Model
 {
     protected $table = 'approvers';
-    /* 
+    /*
     getByAccountId()
         mencari semua data approval berdasarkan account_id
     */
@@ -22,12 +23,12 @@ class Approvers extends Model
         return $approvers;
     }
 
-    /* 
+    /*
     getByApprovalId()
         mencari semua data approvers berdasarkan approval_id
     */
     public static function getByApprovalId($approval_id)
-    {   
+    {
         //
         $approvers = Approvers::Distinct()
             ->join('accounts', 'approvers.account_id', '=', 'accounts.id')
@@ -45,7 +46,7 @@ class Approvers extends Model
         return $approvers;
     }
 
-    /* 
+    /*
     getTotalApprovalByAccountId
         mencari total approval yang ada berdasarkan account_id
     */
@@ -58,7 +59,7 @@ class Approvers extends Model
         return $TotalApproval->count();
     }
 
-    /* 
+    /*
     getTotalApprovedByAccountId
         mencari total approval yang sudah approved berdasarkan account_id
     */
@@ -72,7 +73,7 @@ class Approvers extends Model
         return $TotalApproved->count();
     }
 
-    /* 
+    /*
     getTotalRejectedByAccountId()
         mencari total approval yang sudah rejected berdasarkan account_id
     */
@@ -86,7 +87,7 @@ class Approvers extends Model
         return $TotalRejected->count();
     }
 
-    /* 
+    /*
     getApprovalStatus()
         mencari approval status berdasarkan account_id dan approval_id
     */
@@ -107,7 +108,7 @@ class Approvers extends Model
         }
     }
 
-    /* 
+    /*
     updateToApproved()
         merubah status approval menjadi approved
     */
@@ -128,7 +129,7 @@ class Approvers extends Model
             $result = DB::table('approvers')
                 ->where('account_id', '=', $account_id)
                 ->where('approval_id', '=', $approval_id)
-                ->update(['approval_status' => "3"]);    
+                ->update(['approval_status' => "3"]);
             if (!$result) {
                 throw new Exception("Error Query");
             }
@@ -140,7 +141,7 @@ class Approvers extends Model
         }
     }
 
-    /* 
+    /*
     updateToRejected()
         merubah status approval menjadi rejected
     */
@@ -173,7 +174,7 @@ class Approvers extends Model
         }
     }
 
-    /* 
+    /*
     updateToExpired()
         merubah status approval menjadi expired
     */

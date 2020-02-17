@@ -80,7 +80,7 @@ class UserController extends Controller
     {
         try {
             //search detail user account
-            $account_id = request('account_id');
+            $account_id = \Auth::user()->id;
             $accounts = User::get_AccountInfo($account_id);
 
             //search total approval

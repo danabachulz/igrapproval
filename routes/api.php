@@ -21,23 +21,17 @@ Route::post('login', 'UserController@login');
 //register
 Route::post('register', 'UserController@register');
 
-/* account detail 
-params: 
-1."account_id" -> account id user
-*/
-Route::post('getAccountDetail', 'UserController@getAccountDetail');
-
 /* update approved
-params: 
+params:
 1."account_id" -> account id user
 2."approval_id" -> id approval yang akan di update
 */
 Route::post('updateToApproved', 'ApproversController@actionApprove');
 
 /* update reject
-params: 
+params:
 1."account_id" -> account id user
-2."approval_id" -> id approval yang akan di update 
+2."approval_id" -> id approval yang akan di update
 */
 Route::post('updateToRejected', 'ApproversController@actionReject');
 
@@ -50,6 +44,12 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     //home
     Route::post('home', 'HomeController@home');
+
+    /* account detail
+    params:
+    1."account_id" -> account id user
+    */
+    Route::post('getAccountDetail', 'UserController@getAccountDetail');
 
 });
 

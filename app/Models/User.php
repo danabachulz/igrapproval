@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Exception;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -37,11 +38,14 @@ class User extends Authenticatable
     public static function get_AccountInfo($id = "%")
     {
         $user = User::Distinct()
-            ->select('*')
+            ->select('accounts.*')
             ->Where('id', $id)
-            ->get();
+            ->first();
 
-        return $user[0];
+        // convert to string
+        $user->position_id = (string) $user->position_id;
+        $user->branch_id = (string) $user->branch_id;
+        return $user;
     }
 
 

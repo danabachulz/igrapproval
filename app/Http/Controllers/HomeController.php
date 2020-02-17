@@ -37,13 +37,15 @@ class HomeController extends Controller
                     $app_status = Approval::get_ApprovalStatus($app->approval_id,$user_id);
                     if (empty($app_status)||$app_status->approval_status == 1) {
                         $appDetail = Approval::getApproval_Details($app->approval_id);
+
+                        //make array object
                         $app_list [] = $appDetail;
                     }
                 }
             }
 
             $appresponse['account_name'] = $account_name;
-            $appresponse['total_approval'] = count($app_list);
+            $appresponse['total_approval'] =(string) count($app_list);
             $appresponse['approval_list'] = $app_list;
             //the response
             return AppMessage::get_home($appresponse);
