@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\DB;
 
 class Approvers extends Model
 {
+    protected $table = 'approvers';
     /* 
     getByAccountId()
         mencari semua data approval berdasarkan account_id
     */
     public static function getByAccountId($account_id)
     {
-        $approvers = DB::table('approvers')
+        $approvers = Approvers::Distinct()
             ->select('*')
             ->where('account_id', '=', $account_id)
             ->get();
@@ -28,7 +29,7 @@ class Approvers extends Model
     public static function getByApprovalId($approval_id)
     {   
         //
-        $approvers = DB::table('approvers')
+        $approvers = Approvers::Distinct()
             ->join('accounts', 'approvers.account_id', '=', 'accounts.id')
             ->join('position', 'accounts.position_id', '=', 'position.id')
             ->select(
