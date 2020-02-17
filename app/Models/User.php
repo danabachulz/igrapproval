@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Exception;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -16,21 +13,21 @@ class User extends Authenticatable
 
     protected $table = 'accounts';
 
-    public static function get_AccountID($phone_number, $pin){
+    public static function get_AccountID($phone_number, $pin)
+    {
         $id = User::Distinct()
-                ->select('id','pin')
-                ->where('phone_number',$phone_number)->get();
+            ->select('id', 'pin')
+            ->where('phone_number', $phone_number)->get();
 
         if ($id->isEmpty()) {
             return [];
         }
 
-                if (Hash::check($pin, $id[0]->pin))
-                {
-                    return $id[0]->id;
-                }else{
-                    return [];
-                }
+        if (Hash::check($pin, $id[0]->pin)) {
+            return $id[0]->id;
+        } else {
+            return [];
+        }
 
     }
 
@@ -44,6 +41,16 @@ class User extends Authenticatable
         return $user[0];
     }
 
+    public static function get_AccountById($id)
+    {
+        $user = User::Distinct()
+            ->select('*')
+            ->Where('id', '=', $id)
+            ->first()
+            ->get();
+
+        return $user;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -51,7 +58,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'phone_number','pin',
+        'name', 'email', 'password', 'phone_number', 'pin',
     ];
 
     /**
