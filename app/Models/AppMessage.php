@@ -41,4 +41,16 @@ class AppMessage extends Model
             'error_message' => ''
         ], 200);
     }
+
+    public static function get_home($appresponse){
+        return response()->json([
+            'api_status' => 1,
+            'api_message' => 'sukses',
+            'account_name' => $appresponse['account_name'],
+            'total_approval' =>$appresponse['total_approval'],
+            'approval_list' => $appresponse['approval_list'],
+            'error_code' => '',
+            'error_message' => ''
+        ], 200);
+    }
 }

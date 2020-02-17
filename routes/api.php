@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//testing
-Route::post('tes', 'TestController@exe');
 
 //login
 Route::post('login', 'UserController@login');
@@ -25,6 +23,12 @@ Route::post('register', 'UserController@register');
 
 
 Route::group(['middleware' => 'auth:api'], function(){
+
+    //testing
+    Route::post('tes', 'TestController@exe');
+
+    //home
+    Route::post('home', 'HomeController@home');
 
 });
 
