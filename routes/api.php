@@ -56,27 +56,17 @@ Route::group(['middleware' => 'auth:api'], function () {
     params:
     1."account_id" -> account id user
     2."approval_id" -> id approval yang akan di update
-<<<<<<< HEAD
+
     */
     Route::post('updateToApproved', 'ApproversController@actionApprove');
 
-=======
-     */
-
-    Route::post('updateToApproved', 'ApproversController@actionApprove');
->>>>>>> fb8b4aa4cd6c86707307d449db1767d88e536809
     /* update reject
     params:
     1."account_id" -> account id user
     2."approval_id" -> id approval yang akan di update
-<<<<<<< HEAD
     */
     Route::post('updateToRejected', 'ApproversController@actionReject');
 
-=======
-     */
-    Route::post('updateToRejected', 'ApproversController@actionReject');
-});
->>>>>>> fb8b4aa4cd6c86707307d449db1767d88e536809
+
 
 });
