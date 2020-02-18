@@ -6,16 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class AppMessage extends Model
 {
-    // Created : 16/01/2020
-    // Updated : 21/01/2020
     // this table contains all app json message
+    /*
+        APP Error Code
+        401 = Unauthorized/Cant access using current user ID
+        403 = Unauthorized Known User / Forbidden Access
+        404 = FCM
+        500 = Server Error
+    */
 
     // the error code and message
     public static function get_error_message($error_code, $error_message){
         return response()->json([
             'api_status' => 2,
             'api_message' => 'sukses',
-            'error_code' => $error_code,
+            'error_code' => (string)$error_code,
             'error_message' => $error_message
         ], $error_code);
     }

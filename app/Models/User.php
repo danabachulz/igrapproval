@@ -34,8 +34,9 @@ class User extends Authenticatable
     public static function get_AccountInfo($id = "%")
     {
         $user = User::Distinct()
-            ->select('accounts.*')
-            ->Where('id', $id)
+            ->select('accounts.*','position.description AS position_desc')
+            ->join('position','accounts.position_id','position.id')
+            ->Where('accounts.id', $id)
             ->first();
 
         // convert to string

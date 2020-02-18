@@ -14,27 +14,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/* splash
+params:
+1."app_version" -> versi aplikasi pada hp
+2."token" -> token bila ada
+*/
+Route::post('splash', 'SplashController@splash');
 
-//login
+/* login
+params:
+1."phone_number" -> account phone number
+2."pin" -> account pin (6 digit)
+*/
 Route::post('login', 'UserController@login');
 
-//register
+/* register
+nb: dibuat untuk membuat akun baru guna membantu proses uji coba
+*/
 Route::post('register', 'UserController@register');
-
-/* update approved
-params:
-1."account_id" -> account id user
-2."approval_id" -> id approval yang akan di update
-*/
-Route::post('updateToApproved', 'ApproversController@actionApprove');
-
-/* update reject
-params:
-1."account_id" -> account id user
-2."approval_id" -> id approval yang akan di update
-*/
-Route::post('updateToRejected', 'ApproversController@actionReject');
-
 
 /* Middleware */
 Route::group(['middleware' => 'auth:api'], function(){
@@ -42,7 +39,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     //testing
     Route::post('tes', 'TestController@exe');
 
-    //home
+    /* Home
+    params : Auth/
+    */
     Route::post('home', 'HomeController@home');
 
     /* account detail
@@ -51,8 +50,19 @@ Route::group(['middleware' => 'auth:api'], function(){
     */
     Route::post('getAccountDetail', 'UserController@getAccountDetail');
 
-});
+    /* update approved
+    params:
+    1."account_id" -> account id user
+    2."approval_id" -> id approval yang akan di update
+    */
+    Route::post('updateToApproved', 'ApproversController@actionApprove');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    /* update reject
+    params:
+    1."account_id" -> account id user
+    2."approval_id" -> id approval yang akan di update
+    */
+    Route::post('updateToRejected', 'ApproversController@actionReject');
+
+
 });

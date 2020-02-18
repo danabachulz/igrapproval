@@ -24,7 +24,7 @@ class HomeController extends Controller
 
             //if user have the lowest job level
             if ($job_level == 1) {
-                # code...
+
             }
 
             //get the list of approval from lower user

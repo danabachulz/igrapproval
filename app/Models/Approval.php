@@ -51,5 +51,6 @@ class Approval extends Model
                             ->where('approvers.approval_status','!=',3)
                             ->where('approval.due_date', '>=', date('Y-m-d H:i:s'))
                             ->get();
+        return $approval_status;
     }
 }
