@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
+
 */
 
 /* splash
@@ -31,10 +32,11 @@ Route::post('login', 'UserController@login');
 /* register
 nb: dibuat untuk membuat akun baru guna membantu proses uji coba
 */
+
 Route::post('register', 'UserController@register');
 
 /* Middleware */
-Route::group(['middleware' => 'auth:api'], function(){
+Route::group(['middleware' => 'auth:api'], function () {
 
     //testing
     Route::post('tes', 'TestController@exe');
@@ -47,22 +49,34 @@ Route::group(['middleware' => 'auth:api'], function(){
     /* account detail
     params:
     1."account_id" -> account id user
-    */
+     */
     Route::post('getAccountDetail', 'UserController@getAccountDetail');
 
     /* update approved
     params:
     1."account_id" -> account id user
     2."approval_id" -> id approval yang akan di update
+<<<<<<< HEAD
     */
     Route::post('updateToApproved', 'ApproversController@actionApprove');
 
+=======
+     */
+
+    Route::post('updateToApproved', 'ApproversController@actionApprove');
+>>>>>>> fb8b4aa4cd6c86707307d449db1767d88e536809
     /* update reject
     params:
     1."account_id" -> account id user
     2."approval_id" -> id approval yang akan di update
+<<<<<<< HEAD
     */
     Route::post('updateToRejected', 'ApproversController@actionReject');
 
+=======
+     */
+    Route::post('updateToRejected', 'ApproversController@actionReject');
+});
+>>>>>>> fb8b4aa4cd6c86707307d449db1767d88e536809
 
 });

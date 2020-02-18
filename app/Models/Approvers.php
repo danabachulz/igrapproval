@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use Exception;
@@ -12,8 +11,8 @@ class Approvers extends Model
     protected $table = 'approvers';
     /*
     getByAccountId()
-        mencari semua data approval berdasarkan account_id
-    */
+    mencari semua data approval berdasarkan account_id
+     */
     public static function getByAccountId($account_id)
     {
         $approvers = Approvers::Distinct()
@@ -25,8 +24,8 @@ class Approvers extends Model
 
     /*
     getByApprovalId()
-        mencari semua data approvers berdasarkan approval_id
-    */
+    mencari semua data approvers berdasarkan approval_id
+     */
     public static function getByApprovalId($approval_id)
     {
         //
@@ -48,8 +47,8 @@ class Approvers extends Model
 
     /*
     getTotalApprovalByAccountId
-        mencari total approval yang ada berdasarkan account_id
-    */
+    mencari total approval yang ada berdasarkan account_id
+     */
     public static function getTotalApprovalByAccountId($account_id)
     {
         $TotalApproval = DB::table('approvers')
@@ -61,8 +60,8 @@ class Approvers extends Model
 
     /*
     getTotalApprovedByAccountId
-        mencari total approval yang sudah approved berdasarkan account_id
-    */
+    mencari total approval yang sudah approved berdasarkan account_id
+     */
     public static function getTotalApprovedByAccountId($accountId)
     {
         $TotalApproved = DB::table('approvers')
@@ -75,8 +74,8 @@ class Approvers extends Model
 
     /*
     getTotalRejectedByAccountId()
-        mencari total approval yang sudah rejected berdasarkan account_id
-    */
+    mencari total approval yang sudah rejected berdasarkan account_id
+     */
     public static function getTotalRejectedByAccountId($accountId)
     {
         $TotalRejected = DB::table('approvers')
@@ -89,8 +88,8 @@ class Approvers extends Model
 
     /*
     getApprovalStatus()
-        mencari approval status berdasarkan account_id dan approval_id
-    */
+    mencari approval status berdasarkan account_id dan approval_id
+     */
     public static function getApprovalStatus($account_id, $approval_id)
     {
         try {
@@ -100,7 +99,7 @@ class Approvers extends Model
                 ->where('approval_id', '=', $approval_id)
                 ->first();
             if (!$result) {
-                throw new Exception("Error Query");
+                throw new Exception("Error Query " . $account_id . "-" . $approval_id);
             }
             return $result->approval_status;
         } catch (Exception $ex) {
@@ -110,8 +109,8 @@ class Approvers extends Model
 
     /*
     updateToApproved()
-        merubah status approval menjadi approved
-    */
+    merubah status approval menjadi approved
+     */
     public static function updateToApproved($account_id, $approval_id)
     {
         try {
@@ -123,15 +122,17 @@ class Approvers extends Model
                 throw new Exception("Already Approved");
             } elseif ($approval_status == 2) {
                 throw new Exception("Already Reject");
+            } elseif ($approval_status != 1) {
+                throw new Exception($approval_status);
             }
 
-            //run sql, jika update gagal maka result akan bernilai 1
+            //run sql
             $result = DB::table('approvers')
                 ->where('account_id', '=', $account_id)
                 ->where('approval_id', '=', $approval_id)
                 ->update(['approval_status' => "3"]);
             if (!$result) {
-                throw new Exception("Error Query");
+                throw new Exception("Nothing Change");
             }
             //jika berhasil return 1
             return '1';
@@ -143,8 +144,8 @@ class Approvers extends Model
 
     /*
     updateToRejected()
-        merubah status approval menjadi rejected
-    */
+    merubah status approval menjadi rejected
+     */
     public static function updateToRejected($account_id, $approval_id)
     {
         try {
@@ -156,15 +157,17 @@ class Approvers extends Model
                 throw new Exception("Already Approved");
             } elseif ($approval_status == 2) {
                 throw new Exception("Already Reject");
+            } elseif ($approval_status != 1) {
+                throw new Exception($approval_status);
             }
 
-            //run sql, jika update gagal maka result akan bernilai 1
+            //run sql
             $result = DB::table('approvers')
                 ->where('account_id', '=', $account_id)
                 ->where('approval_id', '=', $approval_id)
                 ->update(['approval_status' => "2"]);
             if (!$result) {
-                throw new Exception("Error Query");
+                throw new Exception("Nothing Change");
             }
             //jika berhasil return 1
             return '1';
@@ -176,8 +179,8 @@ class Approvers extends Model
 
     /*
     updateToExpired()
-        merubah status approval menjadi expired
-    */
+    merubah status approval menjadi expired
+     */
     public static function updateToExpired($account_id, $approval_id)
     {
         try {
