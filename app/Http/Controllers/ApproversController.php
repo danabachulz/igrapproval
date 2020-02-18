@@ -6,15 +6,16 @@ use App\Models\Approvers;
 use App\Models\AppMessage;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApproversController extends Controller
 {
     //
-    public function actionApprove()
+    public function actionApprove(Request $Request)
     {
         try {
-            $account_id = request('account_id');
-            $approval_id = request('approval_id');
+            $account_id = \Auth::user()->id;
+            $approval_id = $Request->get('approval_id');
 
             $result = Approvers::updateToApproved($account_id, $approval_id);
 
@@ -34,14 +35,15 @@ class ApproversController extends Controller
         }
     }
 
-    public function actionReject()
+    public function actionReject(Request $Request)
     {
         try {
-            $account_id = request('account_id');
-            $approval_id = request('approval_id');
+            $account_id = \Auth::user()->id;
+            $approval_id = $Request->get('approval_id');
 
             $result = Approvers::updateToRejected($account_id, $approval_id);
-
+            
+            //jika update tidak berhasil
             if ($result != 1) {
                 throw new Exception($result);
             }

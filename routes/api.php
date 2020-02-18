@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
-
+ */
 
 //login
 Route::post('login', 'UserController@login');
@@ -21,23 +20,8 @@ Route::post('login', 'UserController@login');
 //register
 Route::post('register', 'UserController@register');
 
-/* update approved
-params:
-1."account_id" -> account id user
-2."approval_id" -> id approval yang akan di update
-*/
-Route::post('updateToApproved', 'ApproversController@actionApprove');
-
-/* update reject
-params:
-1."account_id" -> account id user
-2."approval_id" -> id approval yang akan di update
-*/
-Route::post('updateToRejected', 'ApproversController@actionReject');
-
-
 /* Middleware */
-Route::group(['middleware' => 'auth:api'], function(){
+Route::group(['middleware' => 'auth:api'], function () {
 
     //testing
     Route::post('tes', 'TestController@exe');
@@ -48,9 +32,22 @@ Route::group(['middleware' => 'auth:api'], function(){
     /* account detail
     params:
     1."account_id" -> account id user
-    */
+     */
     Route::post('getAccountDetail', 'UserController@getAccountDetail');
 
+    /* update approved
+    params:
+    1."account_id" -> account id user
+    2."approval_id" -> id approval yang akan di update
+     */
+    
+    Route::post('updateToApproved', 'ApproversController@actionApprove');
+    /* update reject
+    params:
+    1."account_id" -> account id user
+    2."approval_id" -> id approval yang akan di update
+     */
+    Route::post('updateToRejected', 'ApproversController@actionReject');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
