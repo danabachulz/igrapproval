@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\AppMessage;
 use App\Models\Approvers;
+use App\Models\AppVersion;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -97,15 +98,14 @@ class UserController extends Controller
 
             //search total rejected
             $total_rejected = Approvers::getTotalRejectedByAccountId($account_id);
+            
+            //get app version
+            $app_version = AppVersion::get_LatestAppVersion();
 
             return response()->json([
                 'api_status' => 1,
                 'api_message' => 'sukses',
-                'name' => $accounts->name,
-                'phone_number' => $accounts->phone_number,
-                'position' => $accounts->position_id,
-                'email' => $accounts->email,
-                'about_apication' => '',
+                'app_version' => $app_version,
                 'total_approval' => $total_approval,
                 'total_approved' => $total_approved,
                 'total_rejected' => $total_rejected,
