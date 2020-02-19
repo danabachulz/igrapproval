@@ -15,7 +15,15 @@ class AppMessage extends Model
         500 = Server Error
     */
 
-    // the error code and message
+    // the json message
+    public static function default_success_message(){
+        return response()->json([
+            'api_status' => 1,
+            'api_message' => 'sukses',
+            'error_code' => '',
+            'error_message' => ''
+        ], 200);
+    }
     public static function get_error_message($error_code, $error_message){
         return response()->json([
             'api_status' => 2,
@@ -58,4 +66,6 @@ class AppMessage extends Model
             'error_message' => ''
         ], 200);
     }
+
+
 }

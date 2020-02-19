@@ -14,18 +14,31 @@ use Exception;
 class SplashController extends Controller
 {
     public function splash(Request $Request){
-        $token = $Request->get('token');
+        $access_token = $Request->get('access_token');
         $phone_appVersion = $Request->get('app_version');
         $db_appVersion = AppVersion::get_LatestAppVersion();
         if ($phone_appVersion == $db_appVersion) {
             /* condition
               jika nilai tidak sama, cek token
             */
-            if (!empty($token)) {
+            if (!empty($access_token)) {
                 /* condition
                     token tidak kosong, cek expired
                 */
+                $token_confirm = User::check_AccessToken($access_token);
 
+                if ($token_confirm == 1) {
+                    /* condition
+                    token masih aktif
+                    */
+                    return AppMessage::default_success_message();
+
+                }else{
+                    return AppMessage::get_error_message('401', 'Token Expired !');
+                }
+
+            }else{
+                return AppMessage::get_error_message('401', 'Token Expired !');
             }
         }
         else {

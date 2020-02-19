@@ -69,6 +69,10 @@ class UserController extends Controller
         $user = $Request->user();
         $appresponse['token'] = $user->createToken('Token Name')->accessToken;
         $appresponse['user_detail'] = User::get_AccountInfo($id);
+
+        //save access_token
+        User::save_AccessToken($id,$appresponse['token']);
+
         return AppMessage::get_login_message($appresponse);
     }
 

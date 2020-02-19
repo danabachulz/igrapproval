@@ -56,6 +56,27 @@ class User extends Authenticatable
         return $user;
     }
 
+    public static function save_AccessToken($account_id,$access_token){
+        //create expired time
+        $tomorrow = date('Y-m-d', strtotime('tomorrow')).' '.date('H:i:s');
+        //save token
+        $user = User::Distinct()
+                ->where('id', $account_id)
+                ->update(['remember_token' => $access_token, 'token_expired'=>$tomorrow]);
+
+        return 1;
+    }
+
+    public static function check_AccessToken($access_token){
+        //check if token still active
+        $user_count = User::Distinct()
+                    ->where('remember_token', $access_token)
+                    ->where('token_expired','>',date('Y-m-d H:i:s'))->count();
+
+        //return 1 if active
+        return $user_count;
+    }
+
     /**
      * The attributes that are mass assignable.
      *

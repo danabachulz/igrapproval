@@ -24,12 +24,8 @@ class ApproversController extends Controller
                 throw new Exception($result);
             }
 
-            return response()->json([
-                'api_status'        => 1,
-                'api_message'       => 'sukses',
-                'error_code'        => '',
-                'error_message'     => ''
-            ]);
+            return AppMessage::default_success_message();
+
         } catch (Exception $ex) {
             return AppMessage::get_error_message(401, $ex->getMessage());
         }
@@ -42,18 +38,14 @@ class ApproversController extends Controller
             $approval_id = $Request->get('approval_id');
 
             $result = Approvers::updateToRejected($account_id, $approval_id);
-            
+
             //jika update tidak berhasil
             if ($result != 1) {
                 throw new Exception($result);
             }
 
-            return response()->json([
-                'api_status'        => 1,
-                'api_message'       => 'sukses',
-                'error_code'        => '',
-                'error_message'     => ''
-            ]);
+            return AppMessage::default_success_message();
+
         } catch (Exception $ex) {
             return AppMessage::get_error_message(401, $ex->getMessage());
         }
