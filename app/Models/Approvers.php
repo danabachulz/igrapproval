@@ -191,8 +191,10 @@ class Approvers extends Model
             if (!$result) {
                 throw new Exception("Error Query");
             }
+            //jika berhasil return 1
             return '1';
         } catch (Exception $ex) {
+            //jika gagal return pesan gagal
             return $ex->getMessage();
         }
     }
