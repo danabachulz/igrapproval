@@ -19,6 +19,7 @@ class ApproversController extends Controller
             $phone_number = \Auth::user()->phone_number;
             $approval_id = $Request->get('approval_id');
             $pin = $Request->get('pin');
+            $note = $Request->get('note');
 
             //check pin
             $pin_check = User::get_AccountID($phone_number, $pin);
@@ -28,7 +29,7 @@ class ApproversController extends Controller
             }
 
             //update status
-            $result = Approvers::updateToApproved($account_id, $approval_id);
+            $result = Approvers::updateToApproved($account_id, $approval_id, $note);
 
             //jika update tidak berhasil
             if ($result != 1) {
@@ -49,6 +50,7 @@ class ApproversController extends Controller
             $phone_number = \Auth::user()->phone_number;
             $approval_id = $Request->get('approval_id');
             $pin = $Request->get('pin');
+            $note = $Request->get('note');
             
             //check pin
             $pin_check = User::get_AccountID($phone_number, $pin);
@@ -57,7 +59,7 @@ class ApproversController extends Controller
             }
 
             //update status
-            $result = Approvers::updateToRejected($account_id, $approval_id);
+            $result = Approvers::updateToRejected($account_id, $approval_id, $note);
 
             //jika update tidak berhasil
             if ($result != 1) {
