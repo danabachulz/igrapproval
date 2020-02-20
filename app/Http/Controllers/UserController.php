@@ -15,7 +15,9 @@ class UserController extends Controller
 {
     public function register(Request $Request)
     {
-
+        /* register controller
+          untuk registrasi user baru
+        */
         try {
             //Validasi apakah email sudah terdaftar
             $userAssoc = User::Where('phone_number', $Request->phone_number)->Get()->Count();
@@ -45,7 +47,9 @@ class UserController extends Controller
 
     public function login(Request $Request)
     {
-
+        /* login controller
+            melakukan eksekusi login user
+        */
         $id = User::get_AccountID($Request->get('phone_number'), $Request->get('pin'));
 
         if (empty($id)) {
@@ -77,10 +81,6 @@ class UserController extends Controller
         return AppMessage::get_login_message($appresponse);
     }
 
-    public function splash(Request $Request)
-    {
-    }
-
     public function getAccountDetail()
     {
         try {
@@ -98,7 +98,7 @@ class UserController extends Controller
 
             //search total rejected
             $total_rejected = Approvers::getTotalRejectedByAccountId($account_id);
-            
+
             //get app version
             $app_version = AppVersion::get_LatestAppVersion();
 
