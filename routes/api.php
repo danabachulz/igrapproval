@@ -32,7 +32,6 @@ Route::post('login', 'UserController@login');
 /* register
 nb: dibuat untuk membuat akun baru guna membantu proses uji coba
 */
-
 Route::post('register', 'UserController@register');
 
 /* Middleware */
@@ -51,6 +50,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     auth/
     */
     Route::post('approval_history', 'HomeController@approval_history');
+
+    /* approval detail
+    params:
+    auth/
+    */
+    Route::post('approval_detail', 'HomeController@approval_detail');
 
     /* account detail
     params:

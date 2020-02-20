@@ -32,12 +32,16 @@ class Approvers extends Model
         $approvers = Approvers::Distinct()
             ->join('accounts', 'approvers.account_id', '=', 'accounts.id')
             ->join('position', 'accounts.position_id', '=', 'position.id')
+            ->join('approval_status','approvers.approval_status','approval_status.id')
             ->select(
                 'accounts.id AS account_id',
+                'accounts.name',
                 'approvers.approval_status',
+                'approval_status.description AS status',
                 'approvers.date',
                 'approvers.note',
-                'position.job_level_id'
+                'position.job_level_id',
+                'position.description AS job_description'
             )
             ->where('approvers.approval_id', '=', $approval_id)
             ->orderBy('position.job_level_id', 'DESC')

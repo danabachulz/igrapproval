@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Approval;
+use App\Models\Approvers;
 use App\Models\AppMessage;
 use App\Models\Position;
 
@@ -74,24 +75,62 @@ class HomeController extends Controller
         $approval = Approval::get_All_Approval();
         $appresponse['account_name'] = $account_name;
         $appresponse['total_approval'] =(string) count($approval);
+        if (empty($approval)) {
+            $approval='';
+        }
         $appresponse['approval_list'] = $approval;
         //the response
         return AppMessage::get_home($appresponse);
     }
 
-    public function approval_history(){
-        /* approval history controller
-            menampilkan seluruh aproval yang telah di kerjakan oleh user
-        */
-        $user_id = \Auth::user()->id;
-        $account_name = \Auth::user()->name;
+    public function approval_history(Request $Request){
+        try{
+            /* approval history controller
+                menampilkan seluruh aproval yang telah di kerjakan oleh user
+            */
+            $user_id = \Auth::user()->id;
+            $account_name = \Auth::user()->name;
 
-        $approval = Approval::get_ApprovalHistory($user_id);
+            //the search keyword
+            $search_key = $Request->get('keyword');
 
-        $appresponse['account_name'] = $account_name;
-        $appresponse['total_approval'] =(string) count($approval);
-        $appresponse['approval_list'] = $approval;
-        //the response
-        return AppMessage::get_home($appresponse);
+            // the filters
+            $filter['status'] = $Request->get('status');
+            $filter['priority'] = $Request->get('priority');
+            $filter['date'] = $Request->get('date');
+
+            $approval = Approval::get_ApprovalHistory($user_id);
+
+            $appresponse['account_name'] = $account_name;
+            $appresponse['total_approval'] =(string) count($approval);
+            if (empty($approval)) {
+                $approval='';
+            }
+            $appresponse['approval_list'] = $approval;
+            //the response
+            return AppMessage::get_home($appresponse);
+
+        }catch (Exception $ex) {
+            return AppMessage::get_error_message(401, $ex->getMessage());
+        }
+
+    }
+
+    public function approval_detail(Request $Request){
+        try{
+            $approval_id = $Request->get('approval_id');
+
+            // ambil detail approval
+            $appresponse['approval_detail'] = Approval::getApproval_Details($approval_id);
+
+            // ambil semua user yg melakukan aksi pada approval
+            $appresponse['approvers'] = Approvers::getByApprovalId($appresponse['approval_detail']->id);
+
+            return AppMessage::get_approvalDetails($appresponse);
+
+        }catch (Exception $ex) {
+            return AppMessage::get_error_message(401, $ex->getMessage());
+        }
+
     }
 }

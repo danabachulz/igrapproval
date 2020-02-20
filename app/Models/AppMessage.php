@@ -67,5 +67,15 @@ class AppMessage extends Model
         ], 200);
     }
 
+    public static function get_approvalDetails($appresponse){
+        return response()->json([
+            'api_status' => 1,
+            'api_message' => 'sukses',
+            'approval_detail' => $appresponse['approval_detail'],
+            'approvers' =>$appresponse['approvers'],
+            'error_code' => '',
+            'error_message' => ''
+        ], 200);
+    }
 
 }

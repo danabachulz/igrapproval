@@ -9,7 +9,8 @@ class Approval extends Model
     protected $table = 'approval';
 
     public static function getApproval_Details($approval_id){
-        $approval_status = Approval::select('approval.*','priority.description AS priority','approval_status.description AS status')
+        $approval_status = Approval::Distinct()
+                            ->select('approval.*','priority.description AS priority','approval_status.description AS status')
                             ->join('priority','approval.priority','priority.id')
                             ->join('approvers','approvers.approval_id','approval.id')
                             ->join('approval_status','approvers.approval_status','approval_status.id')
@@ -21,7 +22,8 @@ class Approval extends Model
 
     public static function check_LowerLevel_Approval($job_level,$branch_id){
         // get lower level user approval status
-        $approval_list = Approval::select('approvers.id','approvers.approval_id','approvers.approval_status')
+        $approval_list = Approval::Distinct()
+                            ->select('approvers.id','approvers.approval_id','approvers.approval_status')
                             ->join('approvers','approvers.approval_id','approval.id')
                             ->join('accounts','approvers.account_id','accounts.id')
                             ->join('position','accounts.position_id','position.id')
@@ -37,7 +39,8 @@ class Approval extends Model
 
     public static function get_ApprovalStatus($approval_id,$user_id){
         //check approval status by user id
-        $approval_status = Approval::select('approval.id AS approval_id','approvers.approval_status')
+        $approval_status = Approval::Distinct()
+                            ->select('approval.id AS approval_id','approvers.approval_status')
                             ->join('approvers','approvers.approval_id','approval.id')
                             ->join('accounts','approvers.account_id','accounts.id')
                             ->join('position','accounts.position_id','position.id')
@@ -48,7 +51,8 @@ class Approval extends Model
     }
 
     public static function get_All_Approval(){
-        $approval_list = Approval::select('approval.*','priority.description AS priority','approval_status.description AS status')
+        $approval_list = Approval::Distinct()
+                        ->select('approval.*','priority.description AS priority','approval_status.description AS status')
                         ->join('approvers','approvers.approval_id','approval.id')
                         ->join('priority','approval.priority','priority.id')
                         ->join('approval_status','approvers.approval_status','approval_status.id')
@@ -62,7 +66,8 @@ class Approval extends Model
     }
 
     public static function get_ApprovalHistory($id){
-        $approval_list = Approval::select('approval.*','priority.description AS priority','approval_status.description AS status')
+        $approval_list = Approval::Distinct()
+                        ->select('approval.*','priority.description AS priority','approval_status.description AS status')
                         ->join('approvers','approvers.approval_id','approval.id')
                         ->join('priority','approval.priority','priority.id')
                         ->join('approval_status','approvers.approval_status','approval_status.id')

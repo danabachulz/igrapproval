@@ -9,7 +9,8 @@ class AppVersion extends Model
     protected $table = 'app_version';
 
     public static function get_LatestAppVersion(){
-        $app_version = AppVersion::select('version')
+        $app_version = AppVersion::Distinct()
+                        ->select('version')
                         ->orderBy('created_at','desc')->first();
 
         return $app_version->version;
