@@ -42,19 +42,20 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('tes', 'TestController@exe');
 
     /* Home
-    params : Auth/
+    params : 
+    1. Auth/
     */
     Route::post('home', 'HomeController@home');
 
     /* account detail
     params:
-    1."account_id" -> account id user
+    1. Auth/
      */
     Route::post('getAccountDetail', 'UserController@getAccountDetail');
 
     /* update approved
     params:
-    1."account_id" -> account id user
+    1. Auth/
     2."approval_id" -> id approval yang akan di update
 
     */
@@ -62,7 +63,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     /* update reject
     params:
-    1."account_id" -> account id user
+    1. Auth/
     2."approval_id" -> id approval yang akan di update
     */
     Route::post('updateToRejected', 'ApproversController@actionReject');
