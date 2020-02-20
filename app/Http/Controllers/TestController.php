@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use Exception;
 
-// use to test uncheck function
+// untuk melakukan pengetesab fungsi secara mandiri
+/*
+    tidak digunakan dalam system, hanya controller untuk testing fungsi API yg akan diterapkan
+*/
 class TestController extends Controller
 {
 

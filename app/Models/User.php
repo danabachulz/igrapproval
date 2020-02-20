@@ -17,14 +17,14 @@ class User extends Authenticatable
     {
         $id = User::Distinct()
             ->select('id', 'pin')
-            ->where('phone_number', $phone_number)->get();
+            ->where('phone_number', $phone_number)->first();
 
-        if ($id->isEmpty()) {
+        if (empty($id)) {
             return [];
         }
 
-        if (Hash::check($pin, $id[0]->pin)) {
-            return $id[0]->id;
+        if (Hash::check($pin, $id->pin)) {
+            return $id->id;
         } else {
             return [];
         }

@@ -14,6 +14,9 @@ use Exception;
 class SplashController extends Controller
 {
     public function splash(Request $Request){
+        /* splash controller
+            controller jendela splash, melakukan pengecekan versi aplikasi dan access_token
+        */
         $access_token = $Request->get('access_token');
         $phone_appVersion = $Request->get('app_version');
         $db_appVersion = AppVersion::get_LatestAppVersion();
@@ -76,6 +79,6 @@ class SplashController extends Controller
             }
         }
 
-        return $phone_version_split.' '.$db_version_split;
+        //return $phone_version_split.' '.$db_version_split;
     }
 }

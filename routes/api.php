@@ -47,6 +47,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     */
     Route::post('home', 'HomeController@home');
 
+    /* approval history
+    params:
+    auth/
+    */
+    Route::post('approval_history', 'HomeController@approval_history');
+
     /* account detail
     params:
     1. Auth/
@@ -70,4 +76,4 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
 
-});
+    });
