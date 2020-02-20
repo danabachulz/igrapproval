@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,25 +12,27 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 
-*/
+ */
 
 /* splash
 params:
 1."app_version" -> versi aplikasi pada hp
 2."token" -> token bila ada
-*/
+ */
 Route::post('splash', 'SplashController@splash');
 
 /* login
 params:
 1."phone_number" -> account phone number
 2."pin" -> account pin (6 digit)
-*/
+ */
 Route::post('login', 'UserController@login');
 
 /* register
 nb: dibuat untuk membuat akun baru guna membantu proses uji coba
+
 */
+
 Route::post('register', 'UserController@register');
 
 /* Middleware */
@@ -41,14 +42,15 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('tes', 'TestController@exe');
 
     /* Home
-    params : Auth/
-    */
+    params :
+    1. Auth/
+     */
     Route::post('home', 'HomeController@home');
 
     /* approval history
     params:
     auth/
-    */
+     */
     Route::post('approval_history', 'HomeController@approval_history');
 
     /* approval detail
@@ -59,25 +61,23 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     /* account detail
     params:
-    1."account_id" -> account id user
+    1. Auth/
      */
-    Route::post('getAccountDetail', 'UserController@getAccountDetail');
+    Route::post('get_account_detail', 'UserController@getAccountDetail');
 
     /* update approved
     params:
-    1."account_id" -> account id user
+    1. Auth/
     2."approval_id" -> id approval yang akan di update
 
-    */
-    Route::post('updateToApproved', 'ApproversController@actionApprove');
+     */
+    Route::post('update_to_approved', 'ApproversController@actionApprove');
 
     /* update reject
     params:
-    1."account_id" -> account id user
+    1. Auth/
     2."approval_id" -> id approval yang akan di update
-    */
-    Route::post('updateToRejected', 'ApproversController@actionReject');
+     */
+    Route::post('update_to_rejected', 'ApproversController@actionReject');
 
-
-
-    });
+});

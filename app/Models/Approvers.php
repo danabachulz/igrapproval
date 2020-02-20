@@ -55,7 +55,7 @@ class Approvers extends Model
      */
     public static function getTotalApprovalByAccountId($account_id)
     {
-        $TotalApproval = DB::table('approvers')
+        $TotalApproval = Approvers::Distinct()
             ->select('id')
             ->where('account_id', '=', $account_id)
             ->get();
@@ -68,7 +68,7 @@ class Approvers extends Model
      */
     public static function getTotalApprovedByAccountId($accountId)
     {
-        $TotalApproved = DB::table('approvers')
+        $TotalApproved = Approvers::Distinct()
             ->select('id')
             ->where('account_id', '=', $accountId)
             ->where('approval_status', '=', 3)
@@ -82,7 +82,7 @@ class Approvers extends Model
      */
     public static function getTotalRejectedByAccountId($accountId)
     {
-        $TotalRejected = DB::table('approvers')
+        $TotalRejected = Approvers::Distinct()
             ->select('id')
             ->where('account_id', '=', $accountId)
             ->where('approval_status', '=', 2)
@@ -97,7 +97,7 @@ class Approvers extends Model
     public static function getApprovalStatus($account_id, $approval_id)
     {
         try {
-            $result = DB::table('approvers')
+            $result = Approvers::Distinct()
                 ->select('approval_status')
                 ->where('account_id', '=', $account_id)
                 ->where('approval_id', '=', $approval_id)
@@ -115,7 +115,7 @@ class Approvers extends Model
     updateToApproved()
     merubah status approval menjadi approved
      */
-    public static function updateToApproved($account_id, $approval_id)
+    public static function updateToApproved($account_id, $approval_id, $note)
     {
         try {
             //cek approval status
@@ -131,10 +131,10 @@ class Approvers extends Model
             }
 
             //run sql
-            $result = DB::table('approvers')
+            $result = Approvers::Distinct()
                 ->where('account_id', '=', $account_id)
                 ->where('approval_id', '=', $approval_id)
-                ->update(['approval_status' => "3"]);
+                ->update(['approval_status' => "3", 'note' => $note]);
             if (!$result) {
                 throw new Exception("Nothing Change");
             }
@@ -150,7 +150,7 @@ class Approvers extends Model
     updateToRejected()
     merubah status approval menjadi rejected
      */
-    public static function updateToRejected($account_id, $approval_id)
+    public static function updateToRejected($account_id, $approval_id, $note)
     {
         try {
             //cek approval status
@@ -166,10 +166,10 @@ class Approvers extends Model
             }
 
             //run sql
-            $result = DB::table('approvers')
+            $result = Approvers::Distinct()
                 ->where('account_id', '=', $account_id)
                 ->where('approval_id', '=', $approval_id)
-                ->update(['approval_status' => "2"]);
+                ->update(['approval_status' => "2", 'note' => $note]);
             if (!$result) {
                 throw new Exception("Nothing Change");
             }
@@ -188,7 +188,7 @@ class Approvers extends Model
     public static function updateToExpired($account_id, $approval_id)
     {
         try {
-            $result = DB::table('approvers')
+            $result = Approvers::Distinct()
                 ->where('account_id', '=', $account_id)
                 ->where('approval_id', '=', $approval_id)
                 ->update(['approval_status' => "4"]);
