@@ -34,30 +34,13 @@ class HomeController extends Controller
             //get the list of approval from lower user
             $approval = Approval::check_LowerLevel_Approval($job_level,$branch_id);
 
-            //get all the approval that already accept by lower lever user && have pending status on current user
-            $app_list = [];
-            foreach ($approval as $app) {
-                if ($app->approval_status == 3) {
-                    $app_status = Approval::get_ApprovalStatus($app->approval_id,$user_id);
-                    if (empty($app_status)||$app_status->approval_status == 1) {
-                        $appDetail = Approval::getApproval_Details($app->approval_id);
-
-                        //make array object
-                        if (!empty($appDetail)) {
-                            # code...
-                            $app_list [] = $appDetail;
-                        }
-                    }
-                }
-            }
-
-            if(empty($app_list)){
+            if(empty($approval)){
                 return $this->specialCase_Approval($account_name);
             }
 
             $appresponse['account_name'] = $account_name;
-            $appresponse['total_approval'] =(string) count($app_list);
-            $appresponse['approval_list'] = $app_list;
+            $appresponse['total_approval'] =(string) count($approval);
+            $appresponse['approval_list'] = $approval;
             //the response
             return AppMessage::get_home($appresponse);
 
@@ -86,7 +69,12 @@ class HomeController extends Controller
     public function approval_history(Request $Request){
         try{
             /* approval history controller
-                menampilkan seluruh aproval yang telah di kerjakan oleh user
+                menampilkan aproval yang telah di kerjakan oleh user,
+                maximum item yg di tampilkan sebanyak 15 opproval terakhir yang telah selesai
+                optional :
+                > mengurutkan berdasarkan priority
+                > filter : status, priority, &hari
+                > pencarian berdasarkan keyword/katakunci
             */
             $user_id = \Auth::user()->id;
             $account_name = \Auth::user()->name;
@@ -94,18 +82,38 @@ class HomeController extends Controller
             //the search keyword
             $search_key = $Request->get('keyword');
 
+            /*the sort keyword, mengurutkan approval yang muncul pada list berdasarkan
+                0 = by last date
+                1 = asc
+                2 = desc
+            */
+            if(!empty($Request->get('sort_id'))){
+                $sortBy = $Request->get('sort_id');
+            }else{
+                $sortBy =0;
+            }
+
             // the filters
             $filter['status'] = $Request->get('status');
             $filter['priority'] = $Request->get('priority');
-            $filter['date'] = $Request->get('date');
+            $filter['date_start'] = $Request->get('date_start');
+            $filter['date_end'] = $Request->get('date_end');
 
-            $approval = Approval::get_ApprovalHistory($user_id);
+            $approval = Approval::get_ApprovalHistory($user_id,$search_key,$filter,$sortBy);
+
+            try{
+                $approval_count = (string) count($approval);
+            }catch(Exception $ex){
+                $approval_count = '0';
+            }
 
             $appresponse['account_name'] = $account_name;
-            $appresponse['total_approval'] =(string) count($approval);
+            $appresponse['total_approval'] =$approval_count;
+
             if (empty($approval)) {
                 $approval='';
             }
+
             $appresponse['approval_list'] = $approval;
             //the response
             return AppMessage::get_home($appresponse);

@@ -49,7 +49,16 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     /* approval history
     params:
-    auth/
+        > pencarian :
+            - keyword (kata kunci untuk pencarian approval, default = null)
+        > filter :
+            - status (menampilkan aproval berdasarkan status yg dipilih, default =null)
+            - priority (menampilkan aproval berdasarkan prioritas yg dipilih, default =null)
+            - date_start (menampilkan aproval berdasarkan tanggal yg dipilih, default =null)
+            - date_end (menampilkan aproval berdasarkan tanggal yg dipilih, default =null)
+        > sorting :
+            - sort_id (digunakan untuk mengurutkan hasil berdasarkan priority dimana sort id
+                        adalah jenis urutan dari hasil luaran (1 = ascendeing , 2 = descending))
      */
     Route::post('approval_history', 'HomeController@approval_history');
 

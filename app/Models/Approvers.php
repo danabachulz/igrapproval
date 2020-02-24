@@ -38,7 +38,7 @@ class Approvers extends Model
                 'accounts.name',
                 'approvers.approval_status',
                 'approval_status.description AS status',
-                'approvers.date',
+                'approvers.updated_at',
                 'approvers.note',
                 'position.job_level_id',
                 'position.description AS job_description'
